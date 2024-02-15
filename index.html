@@ -58,6 +58,35 @@
       // 🧠 Implement a `getAllReversed` method which returns the ints in reverse order
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that none of the methods actually mutate the `ints` property
+      constructor(...args) {
+        this.ints = [...args];
+      }
+      getAll() {
+        return this.ints;
+      }
+      getEvens() {
+        return this.ints.filter(num => num % 2 === 0);
+      }
+      getNegatives() {
+        return this.ints.filter(num => num < 0);
+      }
+      getAllSquared() {
+        return this.ints.map(num => num ** 2);
+      }
+      pop() {
+        return this.ints.pop();
+        
+      }
+      push(num) {
+        this.ints.push(num);
+        return this.ints;
+      }
+      getEveryNth(n) {
+        return this.ints.filter((_, index) => index % n === 0);
+      }
+      getAllReversed() {
+        return this.ints.slice().reverse();
+      }
 
     }
 
@@ -76,7 +105,31 @@
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
-
+      constructor(totalProjectiles) {
+        this.maxCapacity = totalProjectiles;
+        this.currentCapacity = totalProjectiles;
+        this.safety = true;
+      }
+      shoot() {
+        if (this.currentCapacity > 0 && !this.safety) {
+          this.currentCapacity--;
+          return "Bang!";
+        } else {
+          return "Click!";
+        }
+      }
+      reload(number) {
+        if (typeof number !== "number" || number <= 0) {
+          return "Error reloading!";
+        }
+        const newCapacity = this.currentCapacity + number;
+        this.currentCapacity = Math.min(newCapacity, this.maxCapacity);
+        return `${this.currentCapacity} projectiles left!`;
+      }
+      toggleSafety() {
+        this.safety = !this.safety;
+        return this.safety ? "Safety enabled!" : "Safety disabled!";
+      }
     }
 
     // 👉 CHALLENGE 3 EBook
@@ -95,10 +148,22 @@
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
       // ❗ Feel free to implement `back`, although this is not required nor graded
+      constructor(text, charsPerPage) {
+        this.text = text;
+        this.charsPerPage = charsPerPage;
+        this.curretnPage = 0;
+      }
+      next() {
+        const start = this.curretnPage * this.charsPerPage;
+        const end = start + this.charsPerPage;
+        const page = this.text.slice(start, end);
+        this.curretnPage++;
+        return page || null;
+      }
 
     }
 
-    // 👉 CHALLENGE 4 AntFarm
+    // 👉 CHALLENGE 4 AntFarm    
     class AntFarm {
       // 🧠 Constructor takes **any** number of arguments, which are strings: the names of your ants
       // 🧠 Instances of AntFarm have an `ants` property holding an array of ants:
@@ -130,8 +195,38 @@
       //      console.log(list) // prints ["a"]
       // 👉 HINT: if you are not feeling confident with map and filter, solve the problem with for loops,
       //      and with the piece of mind of all tests passing, refactor to use map/filter
-
+      constructor(...ants) {
+        this.ants = ants.map(name => ({ name, health: 100}));
+      }
+      work() {
+        if (this.ants.length === 0) {
+          return "No ants here. Did you work them to death?";
+        }
+        const antsWorked = this.ants.length;
+        this.ants.forEach(ant => {
+          ant.health -= 20;
+        });
+        this.ants = this.ants.filter(ant => ant.health > 0);
+        return `${antsWorked} ants starting work!`
+      }
+      feed(name) {
+        let found = false;
+        this.ants.forEach(ant => {
+          if (ant.name === name) {
+            ant.health += 15;
+            found = true;
+          }
+        });
+        return found ? "Yum!" : `${name} not found!`
+      }
     }
+  
+           
+    
+  
+    
+
+     
 
     // 🧪 TESTS, do not make any changes below this line ===================
     // 🧪 TESTS, do not make any changes below this line ===================
